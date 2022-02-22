@@ -251,6 +251,7 @@ class protocoloController extends controller {
 
             $sql = "SELECT p.*, po.objetivo, pt.tipo FROM protocolo AS p INNER JOIN protocolo_objetivo AS po  INNER JOIN protocolo_tipo as pt WHERE p.objetivo_id=po.id AND p.tipo_id=pt.id ";
             $arrayForm = array();
+            $protocolagens = array();
             if (isset($_GET['nBuscarBT'])) {
                 $_GET['nSelectBuscar'] = !empty($_GET['nSelectBuscar']) ? $_GET['nSelectBuscar'] : '';
                 $parametros = "?nTipo=" . $_GET['nTipo'] . "&nObjeito=" . $_GET['nObjeito'] . "&nSelectBuscar=" . $_GET['nSelectBuscar'] . "&nCampo=" . $_GET['nCampo'] . "&nBuscarBT=BuscarBT";
@@ -286,9 +287,9 @@ class protocoloController extends controller {
                             $sql .= " AND p.data LIKE '%" . $campo . "%' ";
                             break;
                     }
-                }
+                }            
                 //paginacao
-                $limite = 30;
+                $limite = 50;
                 $total_registro = $crudModel->read($sql, $arrayForm);
                 $total_registro = empty($total_registro) ? array() : $total_registro;
                 $paginas = count($total_registro) / $limite;
@@ -302,7 +303,7 @@ class protocoloController extends controller {
                 $protocolagens = $crudModel->read($sql, $arrayForm);
             } else {
                 //paginacao
-                $limite = 30;
+                $limite = 50;
                 $total_registro = $crudModel->read_specific("SELECT COUNT(id) AS qtd FROM protocolo");
                 $paginas = $total_registro['qtd'] / $limite;
                 $indice = 0;

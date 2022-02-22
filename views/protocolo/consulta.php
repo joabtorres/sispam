@@ -177,12 +177,32 @@ if (ceil($paginas) > 1) {
                         <?php
                         echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "protocolo/consultar/1" . $metodo_buscar . "'><span aria-hidden='true'>&laquo;</span></a></li>";
                         $pg = ceil($paginas);
+                        $limite = 3;
+                        $pgprev = ($pagina_atual - $limite) > 0 ? $pagina_atual - $limite : 0;
+                        $pgnext = ($pagina_atual + $limite) < $pg ? $pagina_atual + $limite : $pg;
+                        if ($pg > $pgprev && $pgprev >= $limite) {
+                            echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "protocolo/consultar/1" . $metodo_buscar . "'><span aria-hidden='true'>1</span></a></li>";
+                            if ($pgprev >= $limite) {
+                               echo "<li class='page-space'>...</li>";
+                            }
+                        }
                         for ($p = 0; $p < $pg; $p++) {
                             if ($pagina_atual == ($p + 1)) {
                                 echo "<li class='page-item active'><a class='page-link' href='" . BASE_URL . "protocolo/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
                             } else {
-                                echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "protocolo/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
+                                if ($pgprev <= ($p + 1) && ($p + 1) < $pagina_atual) {
+                                    echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "protocolo/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
+                                }
+                                if (($p + 1) > $pagina_atual && $pgnext >= ($p + 1)) {
+                                    echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "protocolo/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
+                                }
                             }
+                        }
+                        if ($pg > $pgnext && $pgnext >= $limite) {
+                            if ($pgnext >= $limite) {
+                                echo "<li class='page-space'>...</li>";
+                            }
+                            echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "protocolo/consultar/" . ceil($paginas) . $metodo_buscar . "'><span aria-hidden='true'>" . ceil($paginas) . "</span></a></li>";
                         }
                         echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "protocolo/consultar/" . ceil($paginas) . $metodo_buscar . "'>&raquo;</a></li>";
                         ?>

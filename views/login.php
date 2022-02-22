@@ -8,6 +8,10 @@
         <link rel="icon" type="image/gif" href="<?php echo BASE_URL ?>assets/imagens/icon.png" sizes="32x32" />
         <meta property="ogg:title" content="<?php echo NAME_PROJECT ?>">
         <meta property="ogg:description" content="<?php echo NAME_PROJECT ?>">
+        <meta http-equiv="Cache-Control" content="no-cache" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+
         <title><?php echo NAME_PROJECT ?></title>
 
         <!-- Bootstrap CSS CDN -->

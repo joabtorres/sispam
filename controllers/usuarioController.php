@@ -403,11 +403,13 @@ class usuarioController extends controller {
      * @author Joab Torres <joabtorres1508@gmail.com>
      */
     public function sair() {
-        if (isset($_SESSION['usuario'])) {
-            session_destroy();
-            $url = "location: " . BASE_URL . "login";
-            header($url);
+        if (isset($_COOKIE['usuario'])) {
+            unset($_COOKIE['usuario']);
+            setcookie('usuario', null, -1);
         }
+        session_destroy();
+        $url = "location: " . BASE_URL . "login";
+        header($url);
     }
 
 }

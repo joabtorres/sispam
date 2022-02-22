@@ -5,6 +5,11 @@ class loginController extends controller {
     public function index() {
         $viewName = "login";
         $dados = array();
+        if (isset($_COOKIE['usuario'])) {
+            unset($_COOKIE['usuario']);
+            setcookie('usuario', null, -1);
+        }
+        session_destroy();
         $_SESSION = array();
         if (isset($_POST['nSalvar'])) {
             if (!empty($_POST['nUsuario']) && !empty($_POST['nSenha'])) {
@@ -20,7 +25,7 @@ class loginController extends controller {
             if (!isset($dados['erro']) && empty($dados['erro'])) {
 
                 $this->setUser($resultado);
-                
+
                 $url = "location: " . BASE_URL . "home";
                 header($url);
             }

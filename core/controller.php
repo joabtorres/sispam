@@ -19,11 +19,7 @@ class controller {
      * @author Joab Torres <joabtorres1508@gmail.com>
      */
     protected function checkUser() {
-        $TokenUsuario = md5('seg' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
-        if ($_SESSION['usuario']['sessao'] != $TokenUsuario) {
-            $url = "location: " . BASE_URL . "login";
-            header($url);
-        }
+        $_SESSION['usuario'] = unserialize($_COOKIE['usuario']);
         if (isset($_SESSION['usuario']) && is_array($_SESSION['usuario']) && isset($_SESSION['usuario']['status'])) {
             if ($_SESSION['usuario']['status'] == 1) {
                 return $_SESSION['usuario']['acesso'];
@@ -34,14 +30,14 @@ class controller {
             return 0;
         }
     }
-
     protected function checkSetor() {
+        $_SESSION['usuario'] = unserialize($_COOKIE['usuario']);
         if (isset($_SESSION['usuario']) && is_array($_SESSION['usuario']) && isset($_SESSION['usuario']['status'])) {
             if ($_SESSION['usuario']['status'] == 1) {
                 return $_SESSION['usuario']['setor_id'];
             }
         } else {
-            $url = "location: " . BASE_URL . "login";
+            $url = "location: " . BASE_URL . "home";
             header($url);
             return 0;
         }
@@ -49,9 +45,9 @@ class controller {
 
     protected function setUser($user) {
         $_SESSION['usuario'] = array();
-        $_SESSION['usuario']['sessao'] = md5('seg' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
         //codigo
         $_SESSION['usuario']['id'] = $user['id'];
+        //setor
         $_SESSION['usuario']['setor_id'] = $user['setor_id'];
         //nome
         $_SESSION['usuario']['nome'] = $user['nome'];
@@ -59,6 +55,8 @@ class controller {
         $_SESSION['usuario']['acesso'] = $user['acesso'];
         //statu
         $_SESSION['usuario']['status'] = $user['status'];
+        //criando 
+        setcookie("usuario", serialize($_SESSION['usuario']), time() + (3600 * 8));  /* expira em 1 hora */
     }
 
     public function getIdUser() {

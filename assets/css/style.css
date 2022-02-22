@@ -46,6 +46,10 @@ a:focus {
     border-bottom: 1px dashed #ddd;
     margin: 40px 0;
 }
+.page-space{
+    margin: 10px 5px;
+    letter-spacing: 3px;
+}
 
 /* ---------------------------------------------------
     SIDEBAR STYLE
@@ -200,11 +204,11 @@ ul.CTAs a {
     color: white;
 }
 .bg-cinza{
-   background-color: #f1f2f2
+    background-color: #f1f2f2
 }
 
 
-/*usuario*/ 
+/*usuario*/
 
 #cFileImagem{
     display: none;
@@ -219,5 +223,10 @@ ul.CTAs a {
 }
 
 /*//mapa*/
-#viewMapa{   min-height: 300px;}
-#viewMapa2{   min-height: 250px; width: 100%}
+#viewMapa{
+    min-height: 300px;
+}
+#viewMapa2{
+    min-height: 250px;
+    width: 100%
+}

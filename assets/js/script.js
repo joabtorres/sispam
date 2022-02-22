@@ -790,3 +790,20 @@ if (document.getElementById('viewMapa2')) {
     }
     loadScriptGoogleMapsAPI();
 }
+//patrimonio
+if (document.nFormPatrimonio) {
+    function valida_formPatrimonio() {
+        form = document.nFormPatrimonio;
+        if (null_or_empty("iSetor")
+                || null_or_empty("iItem")
+                || null_or_empty("iStatusTombamento")
+                || null_or_empty("iStatus"))
+        {
+            $(form).addClass('was-validated');
+
+        } else {
+            form.submit();
+        }
+
+    }
+}

@@ -8,6 +8,9 @@
         <link rel="icon" type="image/gif" href="<?php echo BASE_URL ?>assets/imagens/icon.png" sizes="32x32" />
         <meta property="ogg:title" content="<?php echo NAME_PROJECT ?>">
         <meta property="ogg:description" content="<?php echo NAME_PROJECT ?>">
+        <meta http-equiv="Cache-Control" content="no-cache" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
         <title><?php echo NAME_PROJECT ?></title>
         <!-- Bootstrap CSS CDN -->
         <link rel="stylesheet" href="<?php echo BASE_URL ?>assets/css/bootstrap.min.css">
@@ -88,16 +91,28 @@
                             </li>
                         </ul>
                     </li>
+
+                    <li>
+                        <a href="#patrimonioSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-angle-double-right"></i> Patrimônio</a>
+                        <ul class="collapse list-unstyled" id="patrimonioSubmenu">
+                            <li>
+                                <a href="<?php echo BASE_URL ?>patrimonio/cadastro"><i class="fas fa-plus-square"></i> Novo Patrimônio</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo BASE_URL ?>patrimonio/consultar"><i class="fas fa-tasks"></i> Consultar Patrimônios</a>
+                            </li>
+                        </ul>
+                    </li>
                     <?php if ($this->checkSetor() == 10) : ?>
                         <li>                        
                             <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false"> <i class="fas fa-angle-double-right"></i>  Usuários</a>
                             <ul class="collapse list-unstyled" id="userSubmenu">
-                                    <li>
-                                        <a href="<?php echo BASE_URL . 'usuario/cadastro' ?>"><i class="fas fa-user-plus"></i> Novo Usuário</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo BASE_URL . 'usuario/consultar' ?>"><i class="fa fa-users"></i> Consultar Usuários</a>
-                                    </li>
+                                <li>
+                                    <a href="<?php echo BASE_URL . 'usuario/cadastro' ?>"><i class="fas fa-user-plus"></i> Novo Usuário</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo BASE_URL . 'usuario/consultar' ?>"><i class="fa fa-users"></i> Consultar Usuários</a>
+                                </li>
                                 <li>
                                     <a href="<?php echo BASE_URL . 'usuario/editar/' . md5($_SESSION['usuario']['id']) ?>"><i class="fas fa-user-edit"></i> Editar Usuário</a>
                                 </li>

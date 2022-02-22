@@ -1,8 +1,11 @@
 <?php
-header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
-header("Pragma: no-cache"); // HTTP 1.0.
-header("Expires: 0"); // Proxies.
 //Iniciando a sessão:
+// Tempo em segundos - 1 hora
+ini_set('session.gc_maxlifetime', 30);
+
+// Tempo em segundos - 1 hora
+session_set_cookie_params(30);
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
