@@ -8,8 +8,9 @@ class homeController extends controller {
             $dados = array();
             $dados['protocolo_tipo'] = $crudModel->read("SELECT * FROM protocolo_tipo");
             $dados['protocolo_objetivo'] = $crudModel->read("SELECT * FROM protocolo_objetivo ORDER BY objetivo ASC");
-            $sql = "SELECT C.*, s.nome as setor, s.abreviacao, cs.nome as status, u.nome as usuario FROM ti_chamado AS c INNER JOIN setor as s INNER JOIN ti_chamado_status as cs INNER JOIN usuario as u WHERE c.setor_id=s.id AND c.status_id=cs.id  AND c.usuario_id=u.id AND c.status_id != 4 ORDER BY c.id DESC LIMIT 0,5";
-            $sql = "SELECT C.*, s.nome as setor, s.abreviacao, cs.nome as status, u.nome as usuario FROM ti_chamado AS c INNER JOIN setor as s INNER JOIN ti_chamado_status as cs INNER JOIN usuario as u WHERE c.setor_id=s.id AND c.status_id=cs.id  AND c.usuario_id=u.id AND c.status_id = 4 ORDER BY c.id DESC LIMIT 0,5";
+            $dados['tramitacoes'] =  $crudModel->read("SELECT pt.tipo as label, COUNT(*) AS data FROM protocolo_tipo AS pt INNER JOIN protocolo AS p WHERE pt.id=p.tipo_id GROUP BY p.tipo_id ORDER BY pt.id ASC");
+            $dados['suporte_interno'] = $crudModel->read("SELECT ca.assunto as label, COUNT(*) AS data FROM ti_chamado_assunto AS ca INNER JOIN ti_chamado AS c WHERE ca.id=c.assunto_id GROUP BY c.assunto_id ORDER BY data DESC");
+            $dados['protocolos'] = $crudModel->read("SELECT po.objetivo as label, COUNT(*) AS data FROM protocolo_objetivo AS po INNER JOIN protocolo AS p WHERE po.id=p.objetivo_id GROUP BY p.objetivo_id ORDER BY data DESC");
             $viewName = "home";
             $this->loadTemplate($viewName, $dados);
         }

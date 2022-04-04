@@ -134,7 +134,7 @@ class patrimonioController extends controller {
             $dados['fonte_recursos'] = $crudModel->read("SELECT * FROM patrimonio_fonte_recurso");
             $dados['classificacao'] = $crudModel->read("SELECT * FROM patrimonio_classificacao");
 
-            $sql = "SELECT p.*, s.nome as setor, ps.status, pt.tombamento, pc.classificacao, pfr.fonte_recurso FROM patrimonio AS P INNER JOIN setor AS s INNER JOIN patrimonio_status AS ps INNER JOIN patrimonio_tombamento AS pt INNER JOIN patrimonio_classificacao AS pc INNER JOIN patrimonio_fonte_recurso AS pfr WHERE p.setor_id=s.id AND p.status_id=ps.id AND p.status_tombamento_id=pt.id AND p.classificacao_id=pc.id AND p.fonte_recurso_id=pfr.id ";
+            $sql = "SELECT p.*, s.nome as setor, ps.status, pt.tombamento, pc.classificacao, pfr.fonte_recurso FROM patrimonio AS p INNER JOIN setor AS s INNER JOIN patrimonio_status AS ps INNER JOIN patrimonio_tombamento AS pt INNER JOIN patrimonio_classificacao AS pc INNER JOIN patrimonio_fonte_recurso AS pfr WHERE p.setor_id=s.id AND p.status_id=ps.id AND p.status_tombamento_id=pt.id AND p.classificacao_id=pc.id AND p.fonte_recurso_id=pfr.id ";
             $arrayForm = array();
             if (isset($_GET['nBuscarBT'])) {
                 $parametros = "nSetor=" . $_GET['nSetor'] . "&nStatus=" . $_GET['nStatus'] . "&nTombamento=" . $_GET['nTombamento'] . "&nRecurso=" . $_GET['nRecurso'] . "&nClassificacao=" . $_GET['nClassificacao'] . "&nSelectBuscar=" . $_GET['nSelectBuscar'] . "&nCampo=" . $_GET['nCampo'] . "&nBuscarBT=BuscarBT";
@@ -217,9 +217,9 @@ class patrimonioController extends controller {
             header($url);
         }
     }
-    
+
     public function excluir($id) {
-         if ($this->checkUser() && $this->checkSetor() == 10) {
+        if ($this->checkUser() && $this->checkSetor() == 10) {
             $crudModel = new crud_db();
             $resultado = $crudModel->read_specific("SELECT * FROM patrimonio WHERE md5(id)=:id", array('id' => addslashes($id)));
             $crudModel->delete_file($resultado['anexo']);
