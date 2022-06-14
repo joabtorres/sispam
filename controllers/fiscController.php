@@ -76,15 +76,15 @@ class fiscController extends controller {
             if (isset($_POST['id_user'])) {
                 $user_id = addslashes($_POST['id_user']);
             }
-            $usuarios = $crudModel->read("SELECT * FROM fisc_tipo_documento WHERE protocolo_id=:id ORDER BY documento ASC", array('id' => $protocolo_id));
+            $usuarios = $crudModel->read("SELECT * FROM fisc_tipo_documento WHERE protocolo_id=:id ORDER BY acao ASC", array('id' => $protocolo_id));
             if (!isset($user_id)) {
                 echo '<option value="" selected = "selected" >Todos </option>';
             }
             foreach ($usuarios as $indice) {
                 if (isset($user_id) && $indice['id'] == $user_id) {
-                    echo '<option value = "' . $indice['id'] . '" selected = "selected">' . $indice['documento'] . '</option>';
+                    echo '<option value = "' . $indice['id'] . '" selected = "selected">' . $indice['acao'] . '</option>';
                 } else {
-                    echo '<option value = "' . $indice['id'] . '">' . $indice['documento'] . '</option>';
+                    echo '<option value = "' . $indice['id'] . '">' . $indice['acao'] . '</option>';
                 }
             }
         }

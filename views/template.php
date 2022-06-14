@@ -79,7 +79,27 @@
                                 </li>
                             </ul>
                         </li>
+                    <?php } if (($this->checkSetor() == 1 || $this->checkSetor() == 10)) { ?>
+                        <li>
+                            <a href="#cprnmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-angle-double-right"></i> Recursos Naturais</a>
+                            <ul class="collapse list-unstyled" id="cprnmenu">
+                                <li>
+                                    <a href="<?php echo BASE_URL ?>cprn/cadastro"><i class="fas fa-plus-square"></i> Nova Solicitação</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo BASE_URL ?>cprn/consultar"><i class="fas fa-tasks"></i> Consultar Solicitações</a>
+                                </li>
+                            </ul>
+                        </li>
                     <?php } ?>
+                    <li>
+                        <a href="#licencimantoSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-angle-double-right"></i> Licenciamento</a>
+                        <ul class="collapse list-unstyled" id="licencimantoSubmenu">
+                            <li>
+                                <a href="<?php echo BASE_URL ?>lic/enquadramento"><i class="fas fa-search"></i> Consultar PRENATI</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li>
                         <a href="#tiSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-angle-double-right"></i> Suporte Interno</a>
                         <ul class="collapse list-unstyled" id="tiSubmenu">
@@ -180,7 +200,7 @@
                 <div class="mb-5"></div>
                 <div id="col">
                     <hr>
-                    <p class="text-center small " style="color: #666"><?php echo NAME_PROJECT ?> - Versão 1.0 <br/>
+                    <p class="text-center small " style="color: #666"><?php echo NAME_PROJECT ?> - Versão 1.5 <br/>
                         <span style="color: #666">&copy; Copyright 2020 - <a href="http://lattes.cnpq.br/0856780614635850" target="_blank">Joab Torres Alencar</a></span> </p>
                     <br>
                 </div>

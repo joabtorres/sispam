@@ -5,8 +5,8 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>home"><i class="fa fa-tachometer-alt"></i> Inicial</a></li>
-                    <li class="breadcrumb-item"><a href="#" ><i class="fas fa-angle-double-right"></i> Fiscalização</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><a href="<?php echo BASE_URL ?>fisc_solicitacao/consultar/1"><i class="fas fa-tasks"></i> Consultar Solicitações</a></li>
+                    <li class="breadcrumb-item"><a href="#" ><i class="fas fa-angle-double-right"></i> Recursos Naturais</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="<?php echo BASE_URL ?>cprn/consultar/1"><i class="fas fa-tasks"></i> Consultar Solicitações</a></li>
                 </ol>
             </nav>
         </div>
@@ -24,11 +24,11 @@
                 </header>
                 <div class="collapse" id="collapseExample">
                     <article class="card-body">
-                        <form method="GET" action="<?php echo BASE_URL ?>fisc_solicitacao/consultar/1" name="formSearhCofisc">
+                        <form method="GET" action="<?php echo BASE_URL ?>cprn/consultar/1" name="formSearhCPRN">
                             <div class="form-row">
                                 <div class="col-md-3 mb-3">
                                     <label for='iTipoProtocolo'>Tipo de Protocolo: </label><br/>
-                                    <select class="select-single custom-select" name="nTipoProtocolo" id="iTipoProtocolo" onchange="selectTipoDenuncia(this.value)">
+                                    <select class="select-single custom-select" name="nTipoProtocolo" id="iTipoProtocolo" onchange="selectTipo(this.value)">
                                         <option value="" selected = "selected" >Todos </option>
                                         <?php
                                         foreach ($tipo_protocolo as $indice) {
@@ -77,13 +77,25 @@
                                 </div>                               
                             </div>
                             <div class="form-row">
+                                <div class="col-md-3 mb-3">
+                                    <label for='iTipoDenuncia'>Tipo de Categoria:  </label><br/>
+                                    <select class="select-single custom-select" name="nCategoria" id="iTipoDenuncia"  onchange="selectSolicitacao(this.value);">
+                                        <option value="" selected = "selected" >Todos </option>
+                                        <?php
+                                        foreach ($tipo_categoria as $indice) {
+                                            echo '<option value = "' . $indice['id'] . '">' . $indice['categoria'] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                    <div class="invalid-feedback">Informe o tipo da solicitação</div>
+                                </div>
                                  <div class="col-md-3 mb-3">
-                                    <label for='iTipoDenuncia'>Tipo de Solicitação:  </label><br/>
-                                    <select class="select-single custom-select" name="nTipoSolicitacao" id="iTipoDenuncia" >
+                                    <label for='iTipoAcao'>Tipo de Solicitação:  </label><br/>
+                                    <select class="select-single custom-select" name="nSolicitacao" id="iTipoAcao" >
                                         <option value="" selected = "selected" >Todos </option>
                                         <?php
                                         foreach ($tipo_solicitacao as $indice) {
-                                            echo '<option value = "' . $indice['id'] . '">' . $indice['tipo_solicitacao'] . '</option>';
+                                            echo '<option value = "' . $indice['id'] . '">' . $indice['acao'] . '</option>';
                                         }
                                         ?>
                                     </select>
@@ -116,8 +128,6 @@
                                     </div>
                                 </div>
 
-                            </div>
-                            <div class="form-row">
                                 <div class="col-md-3 mb-3">
                                     <label for='iSelectBuscar'>Por: </label><br/>
                                     <select class="custom-select" name="nSelectBuscar" id="iSelectBuscar" >
@@ -129,7 +139,7 @@
                                     </select>
                                     <div class="invalid-feedback">Informe o por</div>
                                 </div>
-                                <div class="col-md-9 mb-3">
+                                <div class="col mb-3">
                                     <label for="iCampo">Campo:  </label>
                                     <input type="text" class="form-control" name="nCampo" id="iCampo"/>
                                     <div class="invalid-feedback">
@@ -181,11 +191,11 @@
                                         <td><?php echo $this->formatDateView($indice['data_protocolo']) ?></td>
                                         <td><?php echo!empty($indice['numero_protocolo']) ? $indice['numero_protocolo'] : '' ?></td>
                                         <td><?php echo!empty($indice['ano_protocolo']) ? $indice['ano_protocolo'] : '' ?></td>
-                                        <td><?php echo!empty($indice['solicitante']) ? $indice['solicitante'] : 'Anônimo' ?></td>
+                                        <td><?php echo!empty($indice['interessado']) ? $indice['interessado'] : 'Anônimo' ?></td>
                                         <td class="table-acao text-center">
-                                            <a class="btn btn-success btn-sm" href="<?php echo BASE_URL . 'fisc_solicitacao/solicitacao/' . md5($indice['id']); ?>" title="Visualizar"><i class="fa fa-eye"></i></a> 
+                                            <a class="btn btn-success btn-sm" href="<?php echo BASE_URL . 'cprn/solicitacao/' . md5($indice['id']); ?>" title="Visualizar"><i class="fa fa-eye"></i></a> 
                                             <?php if ($this->checkSetor() == 10 || $this->checkSetor() == 4): ?>
-                                                <a class="btn btn-primary btn-sm" href="<?php echo BASE_URL . 'fisc_solicitacao/editar/' . md5($indice['id']); ?>" title="Editar"><i class="fa fa-pencil-alt"></i></a> 
+                                                <a class="btn btn-primary btn-sm" href="<?php echo BASE_URL . 'cprn/editar/' . md5($indice['id']); ?>" title="Editar"><i class="fa fa-pencil-alt"></i></a> 
                                                 <?php
                                             endif;
                                             if ($this->checkSetor() == 10):
@@ -231,15 +241,36 @@ if (ceil($paginas) > 1) {
                 <nav aria-label="Page navigation example">
                     <ul class = "pagination">
                         <?php
-                        echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "fisc_solicitacao/consultar/1" . $metodo_buscar . "'><span aria-hidden='true'>&laquo;</span></a></li>";
-                        for ($p = 0; $p < ceil($paginas); $p++) {
-                            if ($pagina_atual == ($p + 1)) {
-                                echo "<li class='page-item active'><a class='page-link' href='" . BASE_URL . "fisc_solicitacao/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
-                            } else {
-                                echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "fisc_solicitacao/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
+                        echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "cprn/consultar/1" . $metodo_buscar . "'><span aria-hidden='true'>&laquo;</span></a></li>";
+                        $pg = ceil($paginas);
+                        $limite = 3;
+                        $pgprev = ($pagina_atual - $limite) > 0 ? $pagina_atual - $limite : 0;
+                        $pgnext = ($pagina_atual + $limite) < $pg ? $pagina_atual + $limite : $pg;
+                        if ($pg > $pgprev && $pgprev >= $limite) {
+                            echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "cprn/consultar/1" . $metodo_buscar . "'><span aria-hidden='true'>1</span></a></li>";
+                            if ($pgprev >= $limite) {
+                               echo "<li class='page-space'>...</li>";
                             }
                         }
-                        echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "fisc_solicitacao/consultar/" . ceil($paginas) . $metodo_buscar . "'>&raquo;</a></li>";
+                        for ($p = 0; $p < $pg; $p++) {
+                            if ($pagina_atual == ($p + 1)) {
+                                echo "<li class='page-item active'><a class='page-link' href='" . BASE_URL . "cprn/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
+                            } else {
+                                if ($pgprev <= ($p + 1) && ($p + 1) < $pagina_atual) {
+                                    echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "cprn/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
+                                }
+                                if (($p + 1) > $pagina_atual && $pgnext >= ($p + 1)) {
+                                    echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "cprn/consultar/" . ($p + 1) . $metodo_buscar . "'>" . ($p + 1) . "</a></li>";
+                                }
+                            }
+                        }
+                        if ($pg > $pgnext && $pgnext >= $limite) {
+                            if ($pgnext >= $limite) {
+                                echo "<li class='page-space'>...</li>";
+                            }
+                            echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "cprn/consultar/" . ceil($paginas) . $metodo_buscar . "'><span aria-hidden='true'>" . ceil($paginas) . "</span></a></li>";
+                        }
+                        echo "<li class='page-item'><a class='page-link' href='" . BASE_URL . "cprn/consultar/" . ceil($paginas) . $metodo_buscar . "'>&raquo;</a></li>";
                         ?>
                     </ul>
                 </nav>
@@ -268,12 +299,12 @@ if ($this->checkSetor() == 10):
                             <ul class="list-unstyled">
                                 <li><b>Data do Protocolo: </b> <?php echo $this->formatDateView($indice['data_protocolo']) ?>;</li>
                                 <li><b>Nº do Protocolo: </b> <?php echo!empty($indice['numero_protocolo']) ? $indice['numero_protocolo'] : '' ?>;</li>
-                                <li><b>Solicitante: </b> <?php echo!empty($indice['solicitante']) ? $indice['solicitante'] : 'Anônimo' ?>;</li>
+                                <li><b>Solicitante: </b> <?php echo!empty($indice['interessado']) ? $indice['interessado'] : 'Anônimo' ?>;</li>
                             </ul>
                             <p class="text-justify text-danger"><span class="font-bold">OBS : </span> Ao clicar em "Excluir", este registro e todos registos relacionados ao mesmo deixaram de existir no sistema.</p>
                         </article>
                         <footer class="modal-footer">
-                            <a class="btn btn-danger pull-left" href="<?php echo BASE_URL . 'fisc_solicitacao/excluirsolicitacao/' . md5($indice['id']) ?>"> <i class="fa fa-trash"></i> Excluir</a> 
+                            <a class="btn btn-danger pull-left" href="<?php echo BASE_URL . 'cprn/excluirsolicitacao/' . md5($indice['id']) ?>"> <i class="fa fa-trash"></i> Excluir</a> 
                             <button class="btn btn-default" type="button" data-dismiss="modal"><i class="fa fa-times"></i> Fechar</button>
                         </footer>
                     </section>

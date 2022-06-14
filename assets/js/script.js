@@ -790,6 +790,197 @@ if (document.getElementById('viewMapa2')) {
     }
     loadScriptGoogleMapsAPI();
 }
+//CPRN
+if (document.nFormCPRNSolicitacao) {
+    /*
+     * Google mapas
+     */
+    var geocoder;
+    var map;
+    var marker;
+    function initialize() {
+        if (document.getElementById("cLatitude").value != '' && document.getElementById("cLongitude").value != '') {
+            var latlng = new google.maps.LatLng(document.getElementById("cLatitude").value, document.getElementById("cLongitude").value);
+        } else {
+            var latlng = new google.maps.LatLng(-1.2955583054409823, -47.91926629129639);
+        }
+        var options = {
+            zoom: 14,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("viewMapa"), options);
+        geocoder = new google.maps.Geocoder();
+        marker = new google.maps.Marker({
+            map: map,
+            draggable: true
+        });
+        marker.setPosition(latlng);
+
+        google.maps.event.addListener(marker, 'drag', function () {
+            geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        $('#cEndereco').val(results[0].formatted_address);
+                        $('#cLatitude').val(marker.getPosition().lat());
+                        $('#cLongitude').val(marker.getPosition().lng());
+                    }
+                }
+            });
+        });
+    }
+
+    function loadScriptGoogleMapsAPI() {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCg1ogHawJGuDbw7nd6qBz9yYxYPoGTWQo&callback=initialize';
+        document.body.appendChild(script);
+    }
+
+    function carregarNoMapa(endereco) {
+        geocoder.geocode({'address': endereco + ', Brasil', 'region': 'BR'}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+                    $('#cEndereco').val(results[0].formatted_address);
+                    $('#cLatitude').val(latitude);
+                    $('#cLongitude').val(longitude);
+                    var location = new google.maps.LatLng(latitude, longitude);
+                    marker.setPosition(location);
+                    map.setCenter(location);
+                    map.setZoom(16);
+                }
+            }
+        });
+    }
+    loadScriptGoogleMapsAPI();
+    $(document).ready(function () {
+        $("#btnEndereco").click(function () {
+            if ($(this).val() !== "")
+                carregarNoMapa($("#txtEndereco").val());
+        });
+        $("#cEndereco").blur(function () {
+            if ($(this).val() !== "")
+                carregarNoMapa($(this).val());
+        });
+    });
+    function selectTipo(tipo_protocolo) {
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("iTipoDocumento").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("POST", base_url + "cprn/get_tipo_documento", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("protocolo_id=" + tipo_protocolo);
+    }
+
+    function selectSolicitacao(tipo_categoria) {
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("iTipoAcao").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("POST", base_url + "cprn/get_tipo_acao", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("categoria_id=" + tipo_categoria);
+    }
+
+    function selectBairro(cidade_id) {
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("iBairro").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("POST", base_url + "fisc/get_bairro", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("cidade_id=" + cidade_id);
+    }
+
+    function validarFormCPRNSolicitacao() {
+        var form = document.nFormCPRNSolicitacao;
+        if (null_or_empty("iData")
+                || null_or_empty("iDatar")
+                || null_or_empty("iTipoProtocolo")
+                || null_or_empty("iTipoDocumento")
+                || null_or_empty("iOrigem")
+                || null_or_empty("iNumeroProtocolo")
+                || null_or_empty("iAnoProtocolo")
+                || null_or_empty("iOrgaoSolicitante")
+                || null_or_empty("iTipoSolicitacao")
+                || null_or_empty("iTipoAcao")
+                || null_or_empty("iTecnico")
+                || null_or_empty("iStatus")
+                || null_or_empty("iSolicitante")
+                || null_or_empty("iCidade")
+                || null_or_empty("iBairro"))
+        {
+            $(form).addClass('was-validated');
+        } else {
+            form.submit();
+        }
+    }
+}
+if (document.formSearhCPRN) {
+    function selectTipo(tipo_protocolo) {
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("iTipoDocumento").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("POST", base_url + "cprn/search_tipo_documento", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("protocolo_id=" + tipo_protocolo);
+    }
+
+    function selectSolicitacao(tipo_categoria) {
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("iTipoAcao").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("POST", base_url + "cprn/search_tipo_acao", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("categoria_id=" + tipo_categoria);
+    }
+}
+//patrimonio
+if (document.nFormEnquadramento) {
+    function valida_formPatrimonio() {
+        form = document.nFormEnquadramento;
+        if (null_or_empty("iTipologia")
+                || null_or_empty("iLimite"))
+        {
+            $(form).addClass('was-validated');
+
+        } else {
+            form.submit();
+        }
+
+    }
+    function selectEnquadramento(tipologia) {
+        xhttp = new XMLHttpRequest();
+        xhttp.open("POST", base_url + "lic/get_enquadramento", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                result = JSON.parse(this.responseText); 
+                document.getElementById("iId").value=result.cod;
+                document.getElementById("icategoria").value=result.categoria;
+                document.getElementById("iUnidade").value=result.unidade;
+
+            }
+        };
+        xhttp.send("cod=" + tipologia);
+    }
+}
+
 //patrimonio
 if (document.nFormPatrimonio) {
     function valida_formPatrimonio() {
